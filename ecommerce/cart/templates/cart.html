@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- Header -->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Cart</h1>
+            <p class="lead fw-normal text-white-50 mb-0">View the cart items</p>
+        </div>
+    </div>
+</header>
+
+<br>
+
+<div class="container">
+    {% if cart_products %}
+        {% for product in cart_products %}
+        <div class="card mx-auto shadow-lg" style="max-width: 800px; width: 100%;">
+            
+            <!-- Image Container with Gray Background -->
+            <div class="d-flex justify-content-center align-items-center" 
+                 style="background-color: #f8f9fa; padding: 20px;">
+                <img src="{{ product.image.url }}" class="img-fluid" alt="Product Image"
+                     style="max-height: 400px; width: auto; object-fit: contain;">
+            </div>
+
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text">{{ product.description }}</p>
+
+                <!-- Sale Badge -->
+                {% if product.is_sales %}
+                    <div class="d-flex justify-content-center small text-warning mb-2">
+                        <div class="bi-star-fill"></div>&nbsp;&nbsp; Sale! &nbsp;&nbsp;<div class="bi-star-fill"></div>
+                    </div>
+                    <strike>${{ product.price }}</strike>&nbsp;<strong>${{ product.sale_price }}</strong>
+                {% else %}
+                    <strong>${{ product.price }}</strong>
+                {% endif %}
+
+                <!-- Quantity Selector -->
+                <div class="row align-items-center justify-content-center mt-3">
+                    <div class="col-auto">Quantity:</div>
+                    <div class="col-auto">
+                        <select class="form-select form-select-sm" id="qty-cart" style="width: 100px;">
+                            {% for key, value in quantities.items %}
+                                {% if key == product.id|slugify %}
+                                    <option selected>{{ value }}</option>
+                                {% endif %}
+                            {% endfor %}
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="mt-3">
+                    <a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Home</a>
+                </div>
+            </div>
+        </div>
+        <br>
+        {% endfor %}
+    {% else %}
+        <div class="text-center">
+            <h1>Your cart is Empty...!</h1>
+        </div>
+    {% endif %}
+</div>
+
+<br><br>
+
+{% endblock %}

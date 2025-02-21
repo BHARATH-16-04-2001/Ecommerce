@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Header -->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Shop in style</h1>
+            <p class="lead fw-normal text-white-50 mb-0">With this shop homepage template</p>
+        </div>
+    </div>
+</header>
+
+<!-- Section -->
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 justify-content-center">
+            {% for product in products %}
+                <div class="col mb-5">
+                    <div class="card h-100 text-center">
+                        {% if product.is_sales %}
+                            <!-- Sale badge -->
+                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                        {% endif %}
+                        
+                        <!-- Product image -->
+                        <div class="image-container" style="width: 100%; height: 250px; overflow: hidden;">
+                            <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        
+                        <!-- Product details -->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- Product name -->
+                                <h5 class="fw-bolder">{{ product.name }}</h5>
+                                
+                                {% if product.is_sales %}
+                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                        <div class="bi-star-fill"></div>
+                                        &nbsp; Sale! &nbsp;
+                                        <div class="bi-star-fill"></div>
+                                    </div>
+                                    <strike>${{ product.price }}</strike> &nbsp; ${{ product.sale_price }}
+                                {% else %}
+                                    ${{ product.price }}
+                                {% endif %}
+                                
+                                <!-- Product description -->
+                                <p class="text-muted mt-2 description" style="max-height: 3rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                    {{ product.description }}
+                                </p>
+                                <button class="btn btn-link p-0 text-primary show-more">Show more</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Product actions -->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{% url 'product' product.id %}">View Product</a></div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<script>
+    document.querySelectorAll('.show-more').forEach(button => {
+        button.addEventListener('click', function () {
+            let description = this.previousElementSibling;
+            if (description.style.whiteSpace === 'nowrap') {
+                description.style.whiteSpace = 'normal';
+                description.style.overflow = 'visible';
+                description.style.maxHeight = 'none';
+                this.textContent = 'Show less';
+            } else {
+                description.style.whiteSpace = 'nowrap';
+                description.style.overflow = 'hidden';
+                description.style.maxHeight = '3rem';
+                this.textContent = 'Show more';
+            }
+        });
+    });
+</script>
+{% endblock %}
