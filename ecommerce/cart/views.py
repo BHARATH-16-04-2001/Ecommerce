@@ -51,7 +51,16 @@ def cart_add(request):
 
 
 def cart_delete(request):
-  pass
+  cart = Cart(request)
+
+  #test for post
+  if request.POST.get('action') == 'post':
+    product_id = int(request.POST.get('product_id'))
+
+    # Call delete function in cart
+    cart.remove(product = product_id)
+
+    return JsonResponse({'product':product_id})
 
 
 
@@ -60,7 +69,7 @@ def cart_delete(request):
 
 def cart_update(request):
   cart = Cart(request)
-  
+
   #test for post
   if request.POST.get('action') == 'post':
     product_id = int(request.POST.get('product_id'))
