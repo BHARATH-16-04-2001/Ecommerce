@@ -4,7 +4,7 @@ from . models import Product, Category
 from django.contrib.auth import authenticate, login, logout
 # to display the message when loged in or logedout
 from django.contrib import messages
-from . forms import *
+from . forms import * 
 
 # Create your views here.
 def home(request):
@@ -82,3 +82,47 @@ def register_user(request):
       return redirect('register')
   else:
     return render(request, 'register.html', {'form':form})
+  
+
+
+def update_user(request):
+  if request.user.is_authenticated:
+    current_users = User.objects.get(id=request.user.id)
+    user_form = UpdateProfileForm(request.POST or None, instance=current_users)
+
+    if user_form.is_valid():
+      user_form.save() 
+
+      login(request, current_users)
+      messages.success(request, "User has been updated..!")
+      return redirect('home')
+    return render(request, 'update_user.html',{'user_form':user_form})
+  else:
+    messages.success(request,"You must be log in to access the page...")
+    return redirect('home')
+
+def update_password(request):
+  if request.user.is_authenticated:
+    current_user = request.user
+    
+    # did they filled the form
+    if request.method == 'POST':
+      form = ChangePasswordForm(current_user, request.POST) 
+
+      #Is the form is vaild
+      if form.is_valid():
+        form.save()
+        messages.success(request, "Your password is update please log in again...")
+        # login(request, current_user)
+        return redirect('login')
+      else:
+        for error in list(form.errors.values()):
+          messages.error(request, error)
+          return redirect('update_password')
+    else: 
+      form  = ChangePasswordForm(current_user)
+      return render(request, 'update_password.html', {'form':form})
+    
+  else:
+    messages.success(request, "You must logged in to view the page")
+    return redirect('home')

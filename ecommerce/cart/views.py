@@ -3,6 +3,7 @@ from .cart import Cart
 from store.models import Product
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.contrib import messages
 
 
 # Create your views here.
@@ -40,10 +41,9 @@ def cart_add(request):
     cart_quantity =  len(cart)
 
     #return response for json
-
     # response = JsonResponse({'product_name: ': product.name})
     response =  JsonResponse({'qty': cart_quantity})
-
+    messages.success(request, ("Product added to cart...."))
     return response
 
  
@@ -60,7 +60,7 @@ def cart_delete(request):
 
     # Call delete function in cart
     cart.remove(product = product_id)
-
+    messages.success(request, ("Product removed from the cart...."))
     return JsonResponse({'product':product_id})
 
 
@@ -80,6 +80,7 @@ def cart_update(request):
     cart.update(product=product_id, quantity=product_qty)
 
     response =  JsonResponse({'qty':product_qty})
+    messages.success(request, ("Item Quantity Updated.."))
     return response
 
  
