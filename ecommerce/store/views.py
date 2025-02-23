@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from . models import Product, Category
+from . models import Product, Category, Profile
 # for login and logout
 from django.contrib.auth import authenticate, login, logout
 # to display the message when loged in or logedout
@@ -76,7 +76,7 @@ def register_user(request):
       user = authenticate(username=username, password=password)
       login(request, user)
       messages.success(request, "You have been Register Sucessfully...")
-      return redirect('home')
+      return redirect('update_info')
     else:
       messages.success(request, 'Please Register again with valid creditionals')
       return redirect('register')
@@ -112,8 +112,8 @@ def update_password(request):
       #Is the form is vaild
       if form.is_valid():
         form.save()
-        messages.success(request, "Your password is update please log in again...")
-        # login(request, current_user)
+        messages.success(request, "Your password is updated...")
+        login(request, current_user)
         return redirect('login')
       else:
         for error in list(form.errors.values()):
@@ -126,3 +126,23 @@ def update_password(request):
   else:
     messages.success(request, "You must logged in to view the page")
     return redirect('home')
+  
+
+def update_info(request):
+  if request.user.is_authenticated:
+    current_users = Profile.objects.get(user__id=request.user.id)
+    # current_users, created = Profile.objects.get_or_create(user=request.user)
+    form = UserInfoForm(request.POST or None, instance=current_users)
+
+    if form.is_valid():
+      form.save() 
+      messages.success(request, "Your info has been updated..!")
+      return redirect('home')
+    return render(request, 'update_info.html',{'user_form':form})
+  else:
+    messages.success(request,"You must be log in to access the page...")
+    return redirect('home')
+
+
+def search(request):
+  return render(request, 'search.html', {})
