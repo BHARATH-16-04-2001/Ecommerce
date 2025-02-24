@@ -5,9 +5,9 @@ from django.contrib.auth.models import User
 class ShippingAddress(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE, null =True, blank=True)
 	shipping_fullname = models.CharField(max_length=55)
-	shipping_address1 = models.CharField(max_length=200)
 	shipping_email = models.CharField(max_length=100)
-	shipping_address2 = models.CharField(max_length=200)
+	shipping_address1 = models.CharField(max_length=200)
+	shipping_address2 = models.CharField(max_length=200, null=True, blank=True)
 	shipping_city = models.CharField(max_length=25)
 	shipping_state = models.CharField(max_length=30, null=True, blank=True)
 	shipping_zipcode = models.CharField(max_length=15, null=True, blank=True)

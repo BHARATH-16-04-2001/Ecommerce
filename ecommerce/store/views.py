@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 # to display the message when loged in or logedout
 from django.contrib import messages
 from . forms import * 
+from payment.forms import ShippingFrom
+from payment.models import ShippingAddress
 import json
 from django.db.models import Q
 from cart.cart import Cart
@@ -122,6 +124,7 @@ def update_user(request):
     messages.success(request,"You must be log in to access the page...")
     return redirect('home')
 
+
 def update_password(request):
   if request.user.is_authenticated:
     current_user = request.user
@@ -153,13 +156,18 @@ def update_info(request):
   if request.user.is_authenticated:
     current_users = Profile.objects.get(user__id=request.user.id)
     # current_users, created = Profile.objects.get_or_create(user=request.user)
+
+    shipping_user = ShippingAddress.objects.get(user__id=request.user.id)
     form = UserInfoForm(request.POST or None, instance=current_users)
 
-    if form.is_valid():
+    shipping_form = ShippingFrom(request.POST or None, instance=shipping_user)
+
+    if form.is_valid() or shipping_form.is_valid():
       form.save() 
+      shipping_form.save()
       messages.success(request, "Your info has been updated..!")
       return redirect('home')
-    return render(request, 'update_info.html',{'user_form':form})
+    return render(request, 'update_info.html',{'user_form':form , 'shipping_form':shipping_form})
   else:
     messages.success(request,"You must be log in to access the page...")
     return redirect('home')
