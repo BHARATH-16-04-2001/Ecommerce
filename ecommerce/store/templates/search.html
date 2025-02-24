@@ -3,36 +3,63 @@
 <header class="bg-dark py-5">
   <div class="container px-4 px-lg-5 my-5">
     <div class="text-center text-white">
-      <h1 class="display-4 fw-bolder">About Us</h1>
-      <p class="lead fw-normal text-white-50 mb-0">Welcome to Shopsy</p>
+      <h1 class="display-4 fw-bolder">Search Products</h1>
+      <p class="lead fw-normal text-white-50 mb-0">Find what you are looking for..</p>
     </div>
   </div>
 </header>
-<br>
+<br> 
 
 <div class="container">
-  <div class="row">
-    <center>
-      <div class="col-8">
-        <p align="justify">
-          Welcome to Shopsy – Your One-Stop Online Shopping Destination! </br></br> At
-          Shopsy, we bring you the latest fashion, top-quality electronics, and
-          everyday essentials at unbeatable prices. Whether you're looking for
-          trendy apparel, cutting-edge gadgets, or home décor to enhance your
-          space, we’ve got you covered.</br></br> 
-          Our wide range of products ensures that
-          you find exactly what you need, all in one place. Enjoy a seamless
-          shopping experience with fast delivery, secure payment options, and
-          easy returns. Browse through our exclusive collections, avail exciting
-          discounts, and shop with confidence. With Shopsy, online shopping has
-          never been easier or more rewarding! Don't forget to check out our
-          daily deals and limited-time offers. </br></br>
-          Happy shopping at Shopsy – where
-          quality meets affordability!
-          
-        </p>
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-dark text-white text-center">
+          <h4>Search Products</h4>
+        </div>
+        <div class="card-body">
+          <form action="{% url 'search' %}" method="POST">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+              <input type="text" class="form-control rounded-start" placeholder="Search Products..." name="searched" aria-label="Search Products">
+              <button type="submit" class="btn btn-dark">
+                <i class="bi bi-search"></i> Search
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </center>
+    </div>
+  </div>
+  <br>
+  <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+    {% if searched %}
+      {% for product in searched %}
+        <div class="col mb-5">
+          <div class="card h-100 shadow-sm">
+            {% if product.is_sales %}
+              <div class="badge bg-danger text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+            {% endif %}
+            <img class="card-img-top" src="{{product.image.url}}" alt="{{product.name}}" />
+            <div class="card-body text-center">
+              <h5 class="fw-bolder">{{product.name}}</h5>
+              {% if product.is_sales %}
+                <div class="d-flex justify-content-center small text-warning mb-2">
+                  <div class="bi-star-fill"></div>&nbsp; Sale! &nbsp;<div class="bi-star-fill"></div>
+                </div>
+                <strike>${{product.price}}</strike> &nbsp; <strong>${{product.sale_price}}</strong>
+              {% else %}
+                <strong>${{product.price}}</strong>
+              {% endif %}
+              <p class="text-muted mt-2">{{product.description}}</p>
+            </div>
+            <div class="card-footer bg-transparent border-0 text-center">
+              <a class="btn btn-outline-dark" href="{% url 'product' product.id %}">View Product</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
   </div>
 </div>
 
