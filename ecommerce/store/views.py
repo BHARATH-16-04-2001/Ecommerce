@@ -5,7 +5,9 @@ from django.contrib.auth import authenticate, login, logout
 # to display the message when loged in or logedout
 from django.contrib import messages
 from . forms import * 
+import json
 from django.db.models import Q
+from cart.cart import Cart
 
 # Create your views here.
 def home(request):
@@ -48,6 +50,24 @@ def login_user(request):
 
     if user is not None:
       login(request, user)
+
+      # Shopping cart stuff
+      current_user = Profile.objects.get(user__id=request.user.id)
+      
+      # get the items saved in the cart
+      saved_cart = current_user.old_cart
+
+      #covert databse string to python dictionary
+      if saved_cart:
+        # convert to dict using json
+        converted_cart = json.loads(saved_cart)
+        # add loaded dict to session
+        cart = Cart(request)
+        # loop through the cart and add item from db
+        for key, value in converted_cart.items():
+          cart.db_add(product=key, quantity=value)
+
+
       messages.success(request, "Logged In successfull...")
       return redirect('home')
     else:
@@ -57,7 +77,7 @@ def login_user(request):
     return render(request, 'login.html')
   
 
-def logout_user(request):
+def logout_user(request): 
   logout(request)
   messages.success(request, "Loged out successfully..! Thanks for shopping")
   return redirect('home')
