@@ -4,6 +4,7 @@ from django.contrib import messages
 from payment.models import ShippingAddress, Order, OrderItem
 from django.contrib.auth.models import User
 from payment.forms import ShippingFrom, PaymentForm
+from store.models import Product
 
 # Create your views here.
 def payment_success(request):
@@ -83,12 +84,53 @@ def proccess_order(request):
       create_order = Order(user = user, full_name=full_name, email=email, shipping_address=shipping_address, amount_paid=amount_paid)
       create_order.save()
 
+
+    # add order item 
+      # get order id
+      order_id = create_order.pk
+      # get product info
+      for product in cart_products():
+        #get product id
+        product_id = product.id
+        # get product price
+        if product.is_sales:
+          price = product.sale_price
+        else:
+          price = product.price
+
+        # get quanity
+        for key, value in quantities().items():
+          if int(key) == product.id:
+            create_order_item = OrderItem(order_id = order_id , product_id = product_id, user = user , quantity = value , price = price )
+            create_order_item.save()
+
       messages.success(request, "Order Placed..")
       return redirect('home')
     else:
       # user not logged in
       create_order = Order( full_name=full_name, email=email, shipping_address=shipping_address, amount_paid=amount_paid)
       create_order.save()
+
+      # order item
+      order_id = create_order.pk
+      # get product info
+      for product in cart_products():
+        #get product id
+        product_id = product.id
+        # get product price
+        if product.is_sales:
+          price = product.sale_price
+        else:
+          price = product.price
+
+        # get quanity
+        for key, value in quantities().items():
+          if int(key) == product.id:
+            create_order_item = OrderItem(order_id = order_id , product_id = product_id,  quantity = value , price = price )
+            create_order_item.save()
+
+
+
       messages.success(request, "Order Placed..")
       return redirect('home')
    
