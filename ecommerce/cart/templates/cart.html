@@ -124,6 +124,8 @@
         <!-- Total Price -->
         <div class="text-center py-4">
             <h3 class="fw-bold text-dark">Total Price: $ {{totals}}</h3>
+            <br> <br> <br>
+            <a href="{% url "checkout" %}" class="btn btn-success">Checkout</a>
         </div>
 
     {% else %}
