@@ -147,3 +147,26 @@ def proccess_order(request):
     messages.success(request, "Access denied..")
     return redirect('home')
   return render(request, 'proccess_order', {})
+
+
+def shipped(request):
+  if request.user.is_authenticated and request.user.is_superuser:
+    orders = Order.objects.filter(shipped=True)
+
+
+
+    return render(request, 'payment/shipped.html', {'orders':orders})
+  else:
+    messages.success(request, "Access Denied..")
+    return redirect('home')
+
+
+def not_shipped(request):
+  if request.user.is_authenticated and request.user.is_superuser:
+    orders = Order.objects.filter(shipped=False)
+
+
+    return render(request, 'payment/not_shipped.html', {'orders':orders})
+  else:
+    messages.success(request, "Access Denied..")
+    return redirect('home')
