@@ -5,6 +5,7 @@ from payment.models import ShippingAddress, Order, OrderItem
 from django.contrib.auth.models import User
 from payment.forms import ShippingFrom, PaymentForm
 from store.models import Product
+import datetime
 
 # Create your views here.
 def payment_success(request):
@@ -153,6 +154,14 @@ def shipped(request):
   if request.user.is_authenticated and request.user.is_superuser:
     orders = Order.objects.filter(shipped=True)
 
+    if request.POST:
+      status = request.POST['shipping_status']
+      num = request.POST['num']
+
+      order = Order.objects.filter(id=num)
+      
+      now = datetime.datetime.now()
+      order.update(shipped=False)
 
 
     return render(request, 'payment/shipped.html', {'orders':orders})
@@ -164,6 +173,21 @@ def shipped(request):
 def not_shipped(request):
   if request.user.is_authenticated and request.user.is_superuser:
     orders = Order.objects.filter(shipped=False)
+
+    
+    if request.POST:
+      status = request.POST['shipping_status']
+      num = request.POST['num']
+
+      order = Order.objects.filter(id=num)
+
+      now = datetime.datetime.now()
+      order.update(shipped=True, shipped_date = now)
+     
+      
+      messages.success(request, "Shipping status Updated")
+      return redirect('home')
+
 
 
     return render(request, 'payment/not_shipped.html', {'orders':orders})
@@ -178,6 +202,22 @@ def orders(request, pk):
     order = Order.objects.get(id=pk)
     # get order items
     items = OrderItem.objects.filter(order=pk)
+
+    if request.POST:
+      status = request.POST['shipping_status']
+
+      # check true or false
+      if status == "true":
+        order = Order.objects.filter(id=pk)
+        now = datetime.datetime.now()
+        order.update(shipped=True, shipped_date = now)
+      else:
+        order = Order.objects.filter(id=pk)
+        order.update(shipped=False)
+      
+      messages.success(request, "Shipping status Updated")
+      return redirect('home')
+
     return render(request, 'payment/orders.html', {'order':order, 'items':items})
 
   else:
