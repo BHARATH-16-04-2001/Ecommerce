@@ -94,7 +94,7 @@ def proccess_order(request):
         product_id = product.id
         # get product price
         if product.is_sales:
-          price = product.sale_price
+          price = product.sale_price 
         else:
           price = product.price
 
@@ -103,6 +103,11 @@ def proccess_order(request):
           if int(key) == product.id:
             create_order_item = OrderItem(order_id = order_id , product_id = product_id, user = user , quantity = value , price = price )
             create_order_item.save()
+
+      # After order the item delete our cart
+      for key in list(request.session.keys()):
+        if key == "session_key":
+          del request.session[key]
 
       messages.success(request, "Order Placed..")
       return redirect('home')
@@ -129,6 +134,10 @@ def proccess_order(request):
             create_order_item = OrderItem(order_id = order_id , product_id = product_id,  quantity = value , price = price )
             create_order_item.save()
 
+      # After order the item delete our cart
+      for key in list(request.session.keys()):
+        if key == 'session_key':
+          del request.session[key]
 
 
       messages.success(request, "Order Placed..")
