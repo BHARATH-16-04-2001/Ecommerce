@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -30,14 +31,13 @@ SECRET_KEY = 'django-insecure-s8$se7*fr6jo5kn-hz)#p$yx(=e73orag568cp!xstpzrpimnm
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# DEBUG = os.getenv("DEBUG", False)
 
-ALLOWED_HOSTS = ['ecommerce.onrender.com', '127.0.0.1']
+ALLOWED_HOSTS = ['ecommerce.onrender.com', '127.0.0.1', 'https://ecommerce.onrender.com']
 
-CSRF_TRUSTED_ORIGINS = ["https://ecommerce-production-28b2.onrender.com"]
-
+CSRF_TRUSTED_ORIGINS = ["https://ecommerce-production-28b2.onrender.com", "https://ecommerce.onrender.com"]
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -99,6 +99,7 @@ DATABASES = {
         'PASSWORD': os.environ.get('DB_PASSWORD') ,
         'HOST': 'bharath-bharath-4b95.f.aivencloud.com' ,
         'PORT': '23318' ,
+        'DATABASE_URL': 'postgres://avnadmin:AVNS_6uMQ66M3Dl0M-n7S3T0@bharath-bharath-4b95.f.aivencloud.com:23318/defaultdb?sslmode=require'
     }
 }
 
