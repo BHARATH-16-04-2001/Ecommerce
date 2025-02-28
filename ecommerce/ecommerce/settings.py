@@ -33,7 +33,7 @@ DEBUG = True  # Uncomment this if you need to keep DEBUG True. Remove if you pla
 ALLOWED_HOSTS = ['ecommerce.onrender.com', '127.0.0.1', 'https://ecommerce.onrender.com']
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://ecommerce.onrender.com',
+     "https://ecommerce-production-28b2.onrender.com",
 ]
 
 
