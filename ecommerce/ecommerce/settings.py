@@ -98,10 +98,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'defaultdb',
         'USER': 'avnadmin',
-        'PASSWORD': os.environ.get('DB_PASSWORD') ,
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
         'HOST': 'bharath-bharath-4b95.f.aivencloud.com' ,
         'PORT': '23318' ,
-        'DATABASE_URL': 'postgres://avnadmin:AVNS_6uMQ66M3Dl0M-n7S3T0@bharath-bharath-4b95.f.aivencloud.com:23318/defaultdb?sslmode=require'
+        
     }
 }
 
