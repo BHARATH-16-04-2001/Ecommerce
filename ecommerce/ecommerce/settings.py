@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
-import dj_database_url
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,12 +27,15 @@ load_dotenv()
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-s8$se7*fr6jo5kn-hz)#p$yx(=e73orag568cp!xstpzrpimnm'
-
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = os.getenv("DEBUG", False)
+DEBUG = True  # Uncomment this if you need to keep DEBUG True. Remove if you plan to use os.getenv
 
 ALLOWED_HOSTS = ['ecommerce.onrender.com', '127.0.0.1', 'https://ecommerce.onrender.com']
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://ecommerce.onrender.com',
+]
+
 
 CSRF_TRUSTED_ORIGINS = ["https://ecommerce-production-28b2.onrender.com", "https://ecommerce.onrender.com"]
 
