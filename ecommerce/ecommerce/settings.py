@@ -27,17 +27,18 @@ load_dotenv()
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-s8$se7*fr6jo5kn-hz)#p$yx(=e73orag568cp!xstpzrpimnm'
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True  # Uncomment this if you need to keep DEBUG True. Remove if you plan to use os.getenv
 
-ALLOWED_HOSTS = ['ecommerce.onrender.com', '127.0.0.1', 'https://ecommerce.onrender.com']
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True  
+
+ALLOWED_HOSTS = ['ecommerce.onrender.com', '127.0.0.1']
 
 CSRF_TRUSTED_ORIGINS = [
-     "https://ecommerce-production-28b2.onrender.com",
+    "https://ecommerce-production-28b2.onrender.com",
+    "https://ecommerce.onrender.com",
 ]
 
-
-CSRF_TRUSTED_ORIGINS = ["https://ecommerce-production-28b2.onrender.com", "https://ecommerce.onrender.com"]
 
 # Application definition
 INSTALLED_APPS = [
@@ -93,14 +94,15 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'defaultdb',
-        'USER': 'avnadmin',
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': 'bharath-bharath-4b95.f.aivencloud.com' ,
-        'PORT': '23318' ,
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'defaultdb',
+        # 'USER': 'avnadmin',
+        # 'PASSWORD': os.environ.get('DB_PASSWORD'),
+        # 'HOST': 'bharath-bharath-4b95.f.aivencloud.com' ,
+        # 'PORT': '23318' ,
         
     }
 }
